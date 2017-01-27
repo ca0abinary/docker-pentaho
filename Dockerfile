@@ -40,8 +40,12 @@ RUN rm ${PENTAHO_SERVER}/promptuser.sh
 # Disable daemon mode for Tomcat
 RUN sed -i -e 's/\(exec ".*"\) start/\1 run/' ${PENTAHO_SERVER}/tomcat/bin/startup.sh
 
+# Copy scripts and fix permissions
+USER root
 COPY scripts ${PENTAHO_HOME}/scripts
 COPY config ${PENTAHO_HOME}/config
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && chmod -R +x ${PENTAHO_HOME}/scripts
+USER pentaho
 
 EXPOSE 8080
 ENTRYPOINT ["sh", "-c", "$PENTAHO_HOME/scripts/run.sh"]
