@@ -16,24 +16,33 @@ It is based on some really splended work done by [Wellington Marinho](https://gi
   - `postgres:9.4-alpine` worked nicely for me
 
 ## How to run
-### Start a PostgreSQL server
+Start a PostgreSQL server
 ```
 docker run -d -p 5432:5432 --name postgres postgres:9.4-alpine
 ```
 
-### Run once for testing and auto-clean container
+Run once for testing and auto-clean container
 ```
-docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 pentaho-ce:7.0-alpine
-```
-
-### Start in bash, prior to any scripts having executed, auto-clean (for debugging)
-```
-docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 --entrypoint bash pentaho-ce:7.0-alpine
+docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
 ```
 
-### Run as a service
+Start in bash, prior to any scripts having executed, auto-clean (for debugging)
 ```
-docker run -d --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 pentaho-ce:7.0-alpine
+docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 --entrypoint bash ca0abinary/docker-pentaho
+```
+
+Run as a service
+```
+docker run -d --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
+```
+
+## HyperSQL
+It's possible to run without PostgreSQL and only use the hsqldb.
+If you want your data to be preserved in the event of container loss, you should keep it in a data container or volume map.
+
+Example:
+```
+docker run --rm -it -v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb -p 8080:8080 ca0abinary/docker-pentaho
 ```
 
 ## Environment variables
