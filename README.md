@@ -1,4 +1,4 @@
-# Pentaho
+# Pentaho 7.0 Docker Image
 
 ## What is Pentaho?
 [Pentaho](http://www.pentaho.com/) is a Business Intelligence (BI) software company that offers Pentaho Business Analytics, a suite of open source products which provide data integration, OLAP services, reporting, dashboarding, data mining and ETL capabilities.
