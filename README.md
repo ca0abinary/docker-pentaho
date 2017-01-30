@@ -39,10 +39,12 @@ docker run -d --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e 
 ## HyperSQL
 It's possible to run without PostgreSQL and only use the hsqldb.
 If you want your data to be preserved in the event of container loss, you should keep it in a data container or volume map.
+- HSQLDB
+- Jackrabbit stores files locally at `/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository`
 
 Example:
 ```
-docker run --rm -it -v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb -p 8080:8080 ca0abinary/docker-pentaho
+docker run --rm -it -v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb -v /mnt/nfs-share/pentaho/repository:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository -p 8080:8080 ca0abinary/docker-pentaho
 ```
 
 ## Environment variables
