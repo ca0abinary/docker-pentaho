@@ -23,17 +23,22 @@ docker run -d -p 5432:5432 --name postgres postgres:9.4-alpine
 
 Run once for testing and auto-clean container
 ```
-docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
+docker run --rm -it --link postgres:postgres \
+-e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
 ```
 
 Start in bash, prior to any scripts having executed, auto-clean (for debugging)
 ```
-docker run --rm -it --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 --entrypoint bash ca0abinary/docker-pentaho
+docker run --rm -it --link postgres:postgres \
+-e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 \
+--entrypoint bash ca0abinary/docker-pentaho
 ```
 
 Run as a service
 ```
-docker run -d --link postgres:postgres -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
+docker run -d --link postgres:postgres \
+-e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 \
+ca0abinary/docker-pentaho
 ```
 
 ## HyperSQL
@@ -44,7 +49,10 @@ If you want your data to be preserved in the event of container loss, you should
 
 Example:
 ```
-docker run --rm -it -v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb -v /mnt/nfs-share/pentaho/repository:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository -p 8080:8080 ca0abinary/docker-pentaho
+docker run --rm -it \
+-v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb \
+-v /mnt/nfs-share/pentaho/repository:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository \
+-p 8080:8080 ca0abinary/docker-pentaho
 ```
 
 ## Environment variables
