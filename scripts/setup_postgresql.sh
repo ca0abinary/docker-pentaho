@@ -65,10 +65,10 @@ if [ "$PGHOST" ]; then
 	fi
 
 	# Use postgreql for jackrabbit
-	if grep -q postgresql://localhost:5432 $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml; then
-	 cp $PENTAHO_HOME/config/repository.xml $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml
-	 sed -i "s|postgresql://localhost:5432|postgresql://$PGHOST:$PGPORT|g" $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml
-	fi
+	#if grep -q postgresql://localhost:5432 $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml; then
+	# cp $PENTAHO_HOME/config/repository.xml $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml
+	# sed -i "s|postgresql://localhost:5432|postgresql://$PGHOST:$PGPORT|g" $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml
+	#fi
 	
 	# Use postgresql for tomcat (quartz / hibernate)
 	if grep -q hsqldb $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml; then
