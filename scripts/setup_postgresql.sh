@@ -50,20 +50,15 @@ if [ "$PGHOST" ]; then
 	 psql -U $PGUSER -h $PGHOST -d $PGDATABASE -f $PENTAHO_SERVER/data/postgresql/create_quartz_postgresql.sql
 	fi
 
-	# I can't seem to get Hibernate and Quartz working with PgSQL.
-	# Driver can't be found error. Might be related to jar security?
-	
-	# Quartz uses postgresql by default
-	
 	# Use postgresql for hibernate
-	#if grep -q postgresql $PENTAHO_SERVER/pentaho-solutions/system/hibernate/hibernate-settings.xml; then
-	# sed -i s/hsql/postgresql/g $PENTAHO_SERVER/pentaho-solutions/system/hibernate/hibernate-settings.xml
-    #
-	# sed -i s/localhost:5432/$PGHOST:$PGPORT/g $PENTAHO_SERVER/pentaho-solutions/system/hibernate/postgresql.hibernate.cfg.xml
-    #
-	# cp $PENTAHO_HOME/config/jdbc.properties $PENTAHO_SERVER/pentaho-solutions/system/simple-jndi/jdbc.properties
-	# sed -i "s|postgresql://localhost:5432|postgresql://$PGHOST:$PGPORT|g" $PENTAHO_SERVER/pentaho-solutions/system/simple-jndi/jdbc.properties
-	#fi
+	if grep -q postgresql $PENTAHO_SERVER/pentaho-solutions/system/hibernate/hibernate-settings.xml; then
+	 sed -i s/hsql/postgresql/g $PENTAHO_SERVER/pentaho-solutions/system/hibernate/hibernate-settings.xml
+    
+	 sed -i s/localhost:5432/$PGHOST:$PGPORT/g $PENTAHO_SERVER/pentaho-solutions/system/hibernate/postgresql.hibernate.cfg.xml
+    
+	 cp $PENTAHO_HOME/config/jdbc.properties $PENTAHO_SERVER/pentaho-solutions/system/simple-jndi/jdbc.properties
+	 sed -i "s|postgresql://localhost:5432|postgresql://$PGHOST:$PGPORT|g" $PENTAHO_SERVER/pentaho-solutions/system/simple-jndi/jdbc.properties
+	fi
 
 	# Use postgreql for jackrabbit
 	if grep -q postgresql://localhost:5432 $PENTAHO_SERVER/pentaho-solutions/system/jackrabbit/repository.xml; then
@@ -72,8 +67,8 @@ if [ "$PGHOST" ]; then
 	fi
 	
 	# Use postgresql for tomcat (quartz / hibernate)
-	#if grep -q hsqldb $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml; then
-	# cp $PENTAHO_HOME/config/context.xml $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml
-	# sed -i "s|jdbc:postgresql://localhost:5432/|postgresql://$PGHOST:$PGPORT/|g" $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml
-	#fi
+	if grep -q hsqldb $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml; then
+	 cp $PENTAHO_HOME/config/context.xml $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml
+	 sed -i "s|jdbc:postgresql://localhost:5432/|jdbc:postgresql://$PGHOST:$PGPORT/|g" $PENTAHO_SERVER/tomcat/webapps/pentaho/META-INF/context.xml
+	fi
 fi

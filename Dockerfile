@@ -31,8 +31,8 @@ RUN echo https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-6
 	rm -fr sqljdbc_6.0
 
 # Replace outdated Postgresql JDBC driver
-#RUN rm ${PENTAHO_SERVER}/tomcat/lib/postgresql-9.3-1102-jdbc4.jar && \
-#    echo https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar | xargs wget -qO- -O ${PENTAHO_SERVER}/tomcat/lib/postgresql-9.4.1212.jar
+RUN rm ${PENTAHO_SERVER}/tomcat/lib/postgresql-9.3-1102-jdbc4.jar && \
+    echo https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar | xargs wget -qO- -O ${PENTAHO_SERVER}/tomcat/lib/postgresql-9.4.1212.jar
 
 # Disable first-time startup prompt
 RUN rm ${PENTAHO_SERVER}/promptuser.sh
