@@ -48,6 +48,10 @@ if [ "$PGHOST" ]; then
 	fi
 	if [ "$CHK_QUARTZ" -eq "0" ]; then
 	 psql -U $PGUSER -h $PGHOST -d $PGDATABASE -f $PENTAHO_SERVER/data/postgresql/create_quartz_postgresql.sql
+
+	 # Insert dummy table to fix "RUNSCRIPT" issue.
+	 # http://forums.pentaho.com/showthread.php?153231-Pentaho-ce-5-Initialization-Exception
+	 psql -U $PGUSER -h $PGHOST -d quartz -c 'CREATE TABLE "QRTZ" ( NAME VARCHAR(200) NOT NULL, PRIMARY KEY (NAME) );'
 	fi
 
 	# Use postgresql for hibernate
