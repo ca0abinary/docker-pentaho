@@ -10,8 +10,8 @@ ENV PENTAHO_JAVA_HOME $JAVA_HOME
 ENV PENTAHO_SERVER ${PENTAHO_HOME}/server/pentaho-server
 ENV CATALINA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx6144m -XX:MaxPermSize=256m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
 
-# Get minimum requirements to install
-RUN apk add --update wget unzip bash postgresql-client
+# Get support packages
+RUN apk add --update wget unzip bash postgresql-client ttf-dejavu
 
 # Setup pentaho user
 RUN mkdir -p ${PENTAHO_HOME}/server; mkdir ${PENTAHO_HOME}/.pentaho; adduser -D -s /bin/sh -h ${PENTAHO_HOME} pentaho; chown -R pentaho:pentaho ${PENTAHO_HOME}
