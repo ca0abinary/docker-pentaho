@@ -12,10 +12,9 @@ mining and ETL capabilities.
 Pentaho has [clearly
 stated](https://support.pentaho.com/hc/en-us/articles/210384343-Automated-deployment-solutions-Docker-Puppet-Chef-etc-)
 that they will not be providing automated deployment solutions for their
-products. This is a problem since the deployment process is quite complicated.
-
-This docker project provides a much simpler deployment mechanism. It is not
-perfect, but with your help it can get better every day. :-)
+products. This is a problem since the deployment process is quite
+complicated.This docker project provides a much simpler deployment mechanism. It
+is not perfect, but with your help it can get better every day. :-)
 
 It is based on some really splendid work done by [Wellington
 Marinho](https://github.com/wmarinho/docker-pentaho).
@@ -81,8 +80,8 @@ docker run --rm -it \
 
 - `admin` - Administrator.
 - `pat` - Business Analyst.
-- `suzy` - Power User
-- `tiffany` - Report Author
+- `suzy` - Power User.
+- `tiffany` - Report Author.
 
 Default password is `password`.
 
@@ -141,5 +140,5 @@ you can fix it!
 
 - [Wellington
 Marinho](https://github.com/wmarinho/docker-pentaho).
-- [Pentaho 7.0 Docker Image](https://github.com/ca0abinary/docker-pentaho)
-- [Pentaho 7.0 Documentation](https://help.pentaho.com/Documentation/7.0)
+- [Pentaho 7.0 Docker Image](https://github.com/ca0abinary/docker-pentaho).
+- [Pentaho 7.0 Documentation](https://help.pentaho.com/Documentation/7.0).
