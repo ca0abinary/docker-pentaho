@@ -47,5 +47,12 @@ COPY config ${PENTAHO_HOME}/config
 RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && chmod -R +x ${PENTAHO_HOME}/scripts
 USER pentaho
 
+# Volumes:
+# Administration and user accounts:
+#   /opt/pentaho/server/pentaho-server/data/hsqldb
+# Jackrabbit document repository:
+#   /opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository
+VOLUME [ '/opt/pentaho/server/pentaho-server/data/hsqldb', '/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository' ]
+
 EXPOSE 8080
 ENTRYPOINT ["sh", "-c", "$PENTAHO_HOME/scripts/run.sh"]
