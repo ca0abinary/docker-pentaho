@@ -90,38 +90,40 @@ Default password is `password`.
 The simplest `docker-compose.yml` file would be:
 
 ```
-# Pentaho BI
-pentaho:
+version: "3"
+services:
+  # Pentaho BI
+  pentaho:
     container_name: pentaho
     image: ca0abinary/docker-pentaho
     depends_on:
-        - pentaho-pg
+      - pentaho-pg
     ports:
-        - "8080:8080"
+      - "8080:8080"
     environment:
-        - HOST=pentaho-pg
-        - USER=pentaho
-        - PASSWORD=password
+      - HOST=pentaho-pg
+      - USER=pentaho
+      - PASSWORD=password
     volumes:
-        - pentaho-hsqldb-data:/opt/pentaho/server/pentaho-server/data/hsqldb
-        - pentaho-jackrabbit-data:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository
+      - pentaho-hsqldb-data:/opt/pentaho/server/pentaho-server/data/hsqldb
+      - pentaho-jackrabbit-data:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository
 
-# PostgreSQL Database for Pentaho BI
-pentaho-pg:
+  # PostgreSQL Database for Pentaho BI
+  pentaho-pg:
     container_name: pentaho-pg
     image: postgres:9.4
     environment:
-        - POSTGRES_USER=pentaho
-        - POSTGRES_PASSWORD=password
-        - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=pentaho
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-        - pentaho-pg-data:/var/lib/postgresql/data/pgdata
+      - pentaho-pg-data:/var/lib/postgresql/data/pgdata
 
 # Data volumes
 volumes:
-    pentaho-hsqldb-data:
-    pentaho-jackrabbit-data:
-    pentaho-pg-data:
+  pentaho-hsqldb-data:
+  pentaho-jackrabbit-data:
+  pentaho-pg-data:
 ```
 
 ## Problems
