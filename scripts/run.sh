@@ -1,3 +1,8 @@
+if [ ! -f ".hsqldb_config" ]; then
+  cp ${PENTAHO_SERVER}/data/hsqldb-overlay/*.script /opt/pentaho/server/pentaho-server/data/hsqldb/
+   touch .hsqldb_config
+fi
+
 if [ ! -f ".pentaho_pgconfig" ]; then
    sh $PENTAHO_HOME/scripts/setup_postgresql.sh
    #HOSTNAME=$(`echo hostname`)
