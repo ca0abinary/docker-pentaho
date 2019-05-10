@@ -1,10 +1,1 @@
-#hsqldb
-**/temp/**
-**/cache/**
-**/logs/**
-*.log
-*.lck
-**/work/**
-**/karaf/**
-**/marketplace/**
-*samples.zip.*
+hsqldb
