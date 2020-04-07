@@ -14,7 +14,10 @@ ENV CATALINA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx6144m -XX:MaxPermSize=
 RUN apk add --update wget unzip bash postgresql-client ttf-dejavu
 
 # Setup pentaho user
-RUN mkdir -p ${PENTAHO_HOME}/server; mkdir ${PENTAHO_HOME}/.pentaho; adduser -D -s /bin/sh -h ${PENTAHO_HOME} pentaho; chown -R pentaho:pentaho ${PENTAHO_HOME}
+RUN mkdir -p ${PENTAHO_HOME}/server && \
+    mkdir ${PENTAHO_HOME}/.pentaho && \
+    adduser -D -s /bin/sh -h ${PENTAHO_HOME} pentaho && \
+    chown -R pentaho:pentaho ${PENTAHO_HOME}
 USER pentaho
 WORKDIR ${PENTAHO_HOME}/server
 
@@ -47,16 +50,16 @@ RUN sed -i "s/connect quartz pentaho_user/connect quartz/g" ${PENTAHO_SERVER}/da
 USER root
 COPY scripts ${PENTAHO_HOME}/scripts
 COPY config ${PENTAHO_HOME}/config
-RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts \
-    && chmod -R +x ${PENTAHO_HOME}/scripts
-RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/config \
-    && chmod -R +x ${PENTAHO_HOME}/config
-RUN mkdir -p ${PENTAHO_SERVER}data/hsqldb \
-    && chmod 775 -R ${PENTAHO_SERVER}/data/hsqldb \
-    && chown pentaho:pentaho -R ${PENTAHO_SERVER}/data/hsqldb
-RUN mkdir -p ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository \
-    && chmod 775 -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository \
-    && chown pentaho:pentaho -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && \
+    chmod -R +x ${PENTAHO_HOME}/scripts && \
+    chown -R pentaho:pentaho ${PENTAHO_HOME}/config && \
+    chmod -R +x ${PENTAHO_HOME}/config && \
+    mkdir -p ${PENTAHO_SERVER}data/hsqldb && \
+    chmod 775 -R ${PENTAHO_SERVER}/data/hsqldb && \
+    chown pentaho:pentaho -R ${PENTAHO_SERVER}/data/hsqldb && \
+    mkdir -p ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
+    chmod 775 -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
+    chown pentaho:pentaho -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
 USER pentaho
 
 # Volumes:
