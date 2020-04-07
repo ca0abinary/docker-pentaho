@@ -22,7 +22,7 @@ USER pentaho
 WORKDIR ${PENTAHO_HOME}/server
 
 # Get Pentaho Server
-RUN echo http://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/${MAJOR_VERSION}/pentaho-server-ce-${MINOR_VERSION}.zip | xargs wget -qO- -O tmp.zip && \
+RUN echo https://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/${MAJOR_VERSION}/pentaho-server-ce-${MINOR_VERSION}.zip | xargs wget -qO- -O tmp.zip && \
     unzip -q tmp.zip -d ${PENTAHO_HOME}/server && \
     rm -f tmp.zip
 
