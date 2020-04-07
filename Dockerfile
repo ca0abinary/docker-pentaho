@@ -53,13 +53,12 @@ COPY config ${PENTAHO_HOME}/config
 RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && \
     chmod -R +x ${PENTAHO_HOME}/scripts && \
     chown -R pentaho:pentaho ${PENTAHO_HOME}/config && \
-    chmod -R +x ${PENTAHO_HOME}/config && \
     mkdir -p ${PENTAHO_SERVER}data/hsqldb && \
-    chmod 775 -R ${PENTAHO_SERVER}/data/hsqldb && \
-    chown pentaho:pentaho -R ${PENTAHO_SERVER}/data/hsqldb && \
+    chmod -R 775 ${PENTAHO_SERVER}/data/hsqldb && \
+    chown -R pentaho:pentaho ${PENTAHO_SERVER}/data/hsqldb && \
     mkdir -p ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
-    chmod 775 -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
-    chown pentaho:pentaho -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
+    chmod -R 775 ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
+    chown -R pentaho:pentaho ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
 USER pentaho
 
 # Volumes:
