@@ -40,11 +40,23 @@ RUN rm ${PENTAHO_SERVER}/promptuser.sh
 # Disable daemon mode for Tomcat
 RUN sed -i -e 's/\(exec ".*"\) start/\1 run/' ${PENTAHO_SERVER}/tomcat/bin/startup.sh
 
+# Update broken QRTZ SQL
+RUN sed -i "s/connect quartz pentaho_user/connect quartz/g" ${PENTAHO_SERVER}/data/postgresql/create_quartz_postgresql.sql
+
 # Copy scripts and fix permissions
 USER root
 COPY scripts ${PENTAHO_HOME}/scripts
 COPY config ${PENTAHO_HOME}/config
-RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && chmod -R +x ${PENTAHO_HOME}/scripts
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts \
+    && chmod -R +x ${PENTAHO_HOME}/scripts
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/config \
+    && chmod -R +x ${PENTAHO_HOME}/config
+RUN mkdir -p ${PENTAHO_SERVER}data/hsqldb \
+    && chmod 775 -R ${PENTAHO_SERVER}/data/hsqldb \
+    && chown pentaho:pentaho -R ${PENTAHO_SERVER}/data/hsqldb
+RUN mkdir -p ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository \
+    && chmod 775 -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository \
+    && chown pentaho:pentaho -R ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
 USER pentaho
 
 # Volumes:
