@@ -20,31 +20,36 @@ It is based on some really splendid work done by [Wellington
 Marinho](https://github.com/wmarinho/docker-pentaho).
 
 ## Requirements
+
 - [PostgreSQL](https://www.postgresql.org/) 9.4
   - `postgres:9.4-alpine` worked nicely for me
 
 ## How to run
 
 - Start a PostgreSQL server
-```
+
+```Shell
 docker run -d -p 5432:5432 --name postgres postgres:9.4-alpine
 ```
 
 - Run once for testing and auto-clean container
-```
+
+```Shell
 docker run --rm -it --link postgres:postgres \
 -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 ca0abinary/docker-pentaho
 ```
 
 - Start in bash, prior to any scripts having executed, auto-clean (for debugging)
-```
+
+```Shell
 docker run --rm -it --link postgres:postgres \
 -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 \
 --entrypoint bash ca0abinary/docker-pentaho
 ```
 
 - Run as a service
-```
+
+```Shell
 docker run -d --link postgres:postgres \
 -e PGHOST=postgres -e PGUSER=postgres -e PGPASSWORD= -p 8080:8080 \
 ca0abinary/docker-pentaho
@@ -61,8 +66,10 @@ keep it in a data container or volume map.
 - Jackrabbit stores files locally at `/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository`
 
 Example:
-```
+
+```shell
 docker run --rm -it \
+-v ./config/systemListeners.xml:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/systemListeners.xml \
 -v /mnt/nfs-share/pentaho/hsqldb:/opt/pentaho/server/pentaho-server/data/hsqldb \
 -v /mnt/nfs-share/pentaho/repository:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository \
 -p 8080:8080 ca0abinary/docker-pentaho
@@ -89,9 +96,33 @@ Default password is `password`.
 
 The simplest `docker-compose.yml` file would be:
 
-```
+```YAML
 version: "3"
 services:
+
+  # Pentaho BI
+  pentaho:
+    container_name: pentaho
+    image: ca0abinary/docker-pentaho
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config/systemListeners.xml:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/systemListeners.xml
+      - pentaho-hsqldb-data:/opt/pentaho/server/pentaho-server/data/hsqldb
+      - pentaho-jackrabbit-data:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository
+
+# Data volumes
+volumes:
+  pentaho-hsqldb-data:
+  pentaho-jackrabbit-data:
+```
+
+When using PostgreSQL `docker-compose.yml` file would be:
+
+```YAML
+version: "3"
+services:
+
   # Pentaho BI
   pentaho:
     container_name: pentaho
@@ -101,10 +132,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - HOST=pentaho-pg
-      - USER=pentaho
-      - PASSWORD=password
+      - PGHOST=pentaho-pg
+      - PGUSER=pentaho
+      - PGPASSWORD=password
     volumes:
+      - ./config/systemListeners.xml:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/systemListeners.xml
       - pentaho-hsqldb-data:/opt/pentaho/server/pentaho-server/data/hsqldb
       - pentaho-jackrabbit-data:/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository
 
@@ -118,6 +150,11 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - pentaho-pg-data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: pg_isready -U pgadmin || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 # Data volumes
 volumes:
@@ -126,21 +163,8 @@ volumes:
   pentaho-pg-data:
 ```
 
-## Problems
-
-Quartz and Hibernate continue to live on the internal
-[HyperSQL](http://hsqldb.org/) database as despite changing the settings to work
-with PostgreSQL using the provided documentation I'm not having success.
-(`java.sql.SQLException: No suitable driver`)
-
-The databases will be created in PostgreSQL, just not used.
-
-Please feel free to examine the `scripts/setup_postgresql.sh` and post a PR if
-you can fix it!
-
 ## See Also
 
-- [Wellington
-Marinho](https://github.com/wmarinho/docker-pentaho).
+- [Wellington Marinho](https://github.com/wmarinho/docker-pentaho).
 - [Pentaho 7.0 Docker Image](https://github.com/ca0abinary/docker-pentaho).
 - [Pentaho 7.0 Documentation](https://help.pentaho.com/Documentation/7.0).

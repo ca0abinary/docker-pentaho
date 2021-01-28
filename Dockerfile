@@ -14,12 +14,15 @@ ENV CATALINA_OPTS="-Djava.awt.headless=true -Xms4096m -Xmx6144m -XX:MaxPermSize=
 RUN apk add --update wget unzip bash postgresql-client ttf-dejavu
 
 # Setup pentaho user
-RUN mkdir -p ${PENTAHO_HOME}/server; mkdir ${PENTAHO_HOME}/.pentaho; adduser -D -s /bin/sh -h ${PENTAHO_HOME} pentaho; chown -R pentaho:pentaho ${PENTAHO_HOME}
+RUN mkdir -p ${PENTAHO_HOME}/server && \
+    mkdir ${PENTAHO_HOME}/.pentaho && \
+    adduser -D -s /bin/sh -h ${PENTAHO_HOME} pentaho && \
+    chown -R pentaho:pentaho ${PENTAHO_HOME}
 USER pentaho
 WORKDIR ${PENTAHO_HOME}/server
 
 # Get Pentaho Server
-RUN echo http://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/${MAJOR_VERSION}/pentaho-server-ce-${MINOR_VERSION}.zip | xargs wget -qO- -O tmp.zip && \
+RUN echo https://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/${MAJOR_VERSION}/pentaho-server-ce-${MINOR_VERSION}.zip | xargs wget -qO- -O tmp.zip && \
     unzip -q tmp.zip -d ${PENTAHO_HOME}/server && \
     rm -f tmp.zip
 
@@ -40,11 +43,22 @@ RUN rm ${PENTAHO_SERVER}/promptuser.sh
 # Disable daemon mode for Tomcat
 RUN sed -i -e 's/\(exec ".*"\) start/\1 run/' ${PENTAHO_SERVER}/tomcat/bin/startup.sh
 
+# Update broken QRTZ SQL
+RUN sed -i "s/connect quartz pentaho_user/connect quartz/g" ${PENTAHO_SERVER}/data/postgresql/create_quartz_postgresql.sql
+
 # Copy scripts and fix permissions
 USER root
 COPY scripts ${PENTAHO_HOME}/scripts
 COPY config ${PENTAHO_HOME}/config
-RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && chmod -R +x ${PENTAHO_HOME}/scripts
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}/scripts && \
+    chmod -R +x ${PENTAHO_HOME}/scripts && \
+    chown -R pentaho:pentaho ${PENTAHO_HOME}/config && \
+    mkdir -p ${PENTAHO_SERVER}data/hsqldb && \
+    chmod -R 775 ${PENTAHO_SERVER}/data/hsqldb && \
+    chown -R pentaho:pentaho ${PENTAHO_SERVER}/data/hsqldb && \
+    mkdir -p ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
+    chmod -R 775 ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository && \
+    chown -R pentaho:pentaho ${PENTAHO_SERVER}/pentaho-solutions/system/jackrabbit/repository
 USER pentaho
 
 # Volumes:
