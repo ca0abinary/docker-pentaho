@@ -1,3 +1,10 @@
+# Setup the hsqldb databases with a baseline sqlscript that include
+# missing users needed in 8.x
+if [ ! -f ".hsqldb_config" ]; then
+  cp ${PENTAHO_SERVER}/data/hsqldb-overlay/*.script /opt/pentaho/server/pentaho-server/data/hsqldb/
+   touch .hsqldb_config
+fi
+
 if [ ! -f ".pentaho_pgconfig" ]; then
    sh $PENTAHO_HOME/scripts/setup_postgresql.sh
    #HOSTNAME=$(`echo hostname`)

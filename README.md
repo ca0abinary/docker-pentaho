@@ -1,4 +1,4 @@
-# Pentaho 7.0 Docker Image
+# Pentaho 8.2 Docker Image (Only HSQLDB Tested)
 
 ## What is Pentaho?
 
